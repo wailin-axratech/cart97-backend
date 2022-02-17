@@ -2,7 +2,7 @@ const router = require("express").Router()
 const User = require("../models/user")
 const Order = require("../models/order");
 const Favorite = require("../models/favorite");
-const {authenticateToken} = require("../util/userAuthMiddleware");
+const {authenticateUserToken} = require("../util/userAuthMiddleware");
 
 // get all users
 router.get("/", async (req, res) => {
@@ -32,7 +32,7 @@ router.get("/:id", async (req, res) => {
 
 
 // update user by id
-router.put("/:id", authenticateToken, async (req, res) => {
+router.put("/:id", authenticateUserToken, async (req, res) => {
     const userId = req.params.id
 
     const {name, address} = req.body
@@ -52,7 +52,7 @@ router.put("/:id", authenticateToken, async (req, res) => {
 /*  user orders    */
 
 // get all user orders with user id
-router.get("/:id/orders", async (req, res) => {
+router.get("/:id/orders", authenticateUserToken, async (req, res) => {
     const userId = req.params.id
 
     try {
@@ -66,7 +66,7 @@ router.get("/:id/orders", async (req, res) => {
 })
 
 // create user orders with user id
-router.post("/:id/orders", async (req, res) => {
+router.post("/:id/orders", authenticateUserToken, async (req, res) => {
     const userId = req.params.userId
     const {userName, userPhone, userAddress, paymentScreenshot, totalPrice} = req.body;
 
@@ -88,7 +88,7 @@ router.post("/:id/orders", async (req, res) => {
 /*  user favorites    */
 
 // get all user favorites with user id
-router.get("/:userId/favorites", authenticateToken, async (req, res) => {
+router.get("/:userId/favorites", authenticateUserToken, async (req, res) => {
     const userId = req.params.userId
 
     try {
@@ -102,7 +102,7 @@ router.get("/:userId/favorites", authenticateToken, async (req, res) => {
 })
 
 // create user favorite with user id
-router.post("/:userId/favorites", authenticateToken, async (req, res) => {
+router.post("/:userId/favorites", authenticateUserToken, async (req, res) => {
     const userId = req.params.userId
     console.log(userId)
 
@@ -118,7 +118,7 @@ router.post("/:userId/favorites", authenticateToken, async (req, res) => {
 })
 
 // delete user favorite with user id
-router.delete("/:userId/favorites/:favoriteId", authenticateToken, async (req, res) => {
+router.delete("/:userId/favorites/:favoriteId", authenticateUserToken, async (req, res) => {
 
     const userId = req.params.userId
     const favoriteId = req.params.favoriteId
@@ -131,7 +131,6 @@ router.delete("/:userId/favorites/:favoriteId", authenticateToken, async (req, r
     }
 })
 /*  user favorites    */
-
 
 
 module.exports = router

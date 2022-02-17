@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const {JWT_SECRET} = require("../config/config");
 
-const authenticateUserToken = (req, res, next) => {
+const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization']
     const accessToken = authHeader && authHeader.split(' ')[1]
     if (!accessToken) {
@@ -11,7 +11,7 @@ const authenticateUserToken = (req, res, next) => {
         const validatedUser = jwt.verify(accessToken, JWT_SECRET);
 
         //check if jwt user id and requested id are the same
-        if (validatedUser.id != req.params.userId) {
+        if (validatedUser.role !== "admin") {
             return res.status(403).send("you don't have access to perform this operation")
         }
         req.user = validatedUser;
@@ -23,4 +23,4 @@ const authenticateUserToken = (req, res, next) => {
     }
 };
 
-module.exports = {authenticateUserToken};
+module.exports = {authenticateToken};
