@@ -17,7 +17,7 @@ router.post("/signin", async (req, res) => {
                 return res.status(401).json("invalid phone or password");
             }
             const token = jwt.sign({id: user.id}, JWT_SECRET, {expiresIn: '7d'});
-            return res.json(token);
+            return res.send(token);
         }
     } catch (e) {
         return res.status(500).json(e)

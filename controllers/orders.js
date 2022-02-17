@@ -3,23 +3,6 @@ const Order = require("../models/order")
 const User = require("../models/user");
 
 
-// create order
-router.post("/", async (req, res) => {
-    const {userName, userPhone, userAddress, paymentScreenshot, totalPrice} = req.body;
-
-    try {
-        const createdOrder = await Order.create({
-            userName, userPhone, userAddress,
-            paymentScreenshot,
-            totalPrice
-        })
-        return res.status(201).json(createdOrder)
-    } catch (e) {
-        return res.status(500).json(e)
-    }
-})
-
-
 // get all orders
 router.get("", async (req, res) => {
 

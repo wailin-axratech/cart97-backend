@@ -1,10 +1,8 @@
 const router = require("express").Router()
 const User = require("../models/user")
-const jwt = require("jsonwebtoken")
-const bcrypt = require("bcrypt");
-const {JWT_SECRET} = require("../config/config");
 const Order = require("../models/order");
 const Favorite = require("../models/favorite");
+const {authenticateToken} = require("../util/userAuthMiddleware");
 
 // get all users
 router.get("/", async (req, res) => {
@@ -34,11 +32,16 @@ router.get("/:id", async (req, res) => {
 
 
 // update user by id
-router.put("/:id", async (req, res) => {
+router.put("/:id", authenticateToken, async (req, res) => {
     const userId = req.params.id
 
+    const {name, address} = req.body
+
     try {
-        const updatedUser = await User.update(req.body, {where: {id: userId}})
+        const updatedUser = await User.update({
+            name,
+            address
+        }, {where: {id: userId}})
         return res.json(updatedUser)
     } catch (e) {
         return res.status(500).json(e)
@@ -46,7 +49,9 @@ router.put("/:id", async (req, res) => {
 })
 
 
-// get all user orders by user id
+/*  user orders    */
+
+// get all user orders with user id
 router.get("/:id/orders", async (req, res) => {
     const userId = req.params.id
 
@@ -60,9 +65,31 @@ router.get("/:id/orders", async (req, res) => {
     }
 })
 
-// get all user favorites by user id
-router.get("/:id/favorites", async (req, res) => {
-    const userId = req.params.id
+// create user orders with user id
+router.post("/:id/orders", async (req, res) => {
+    const userId = req.params.userId
+    const {userName, userPhone, userAddress, paymentScreenshot, totalPrice} = req.body;
+
+    try {
+        const createdOrder = await Order.create({
+            userName, userPhone, userAddress,
+            paymentScreenshot,
+            totalPrice,
+            userId
+        })
+        return res.status(201).json(createdOrder)
+    } catch (e) {
+        return res.status(500).json(e)
+    }
+})
+/*  user orders  s*/
+
+
+/*  user favorites    */
+
+// get all user favorites with user id
+router.get("/:userId/favorites", authenticateToken, async (req, res) => {
+    const userId = req.params.userId
 
     try {
         const userFavorites = await Favorite.findAll({
@@ -74,18 +101,37 @@ router.get("/:id/favorites", async (req, res) => {
     }
 })
 
+// create user favorite with user id
+router.post("/:userId/favorites", authenticateToken, async (req, res) => {
+    const userId = req.params.userId
+    console.log(userId)
 
-// delete user by id
-// router.delete("/:id",  async (req, res) => {
-//     const userId = req.params.id
-//
-//     try {
-//         await User.destroy({where: {id: userId}})
-//         return res.sendStatus(200)
-//     }
-//     catch (e) {
-//         return res.status(500).json(e)
-//     }
-// })
+    try {
+        const createdFavorite = await Favorite.create({
+            ...req.body,
+            userId
+        })
+        return res.status(201).json(createdFavorite)
+    } catch (e) {
+        return res.status(500).json(e)
+    }
+})
+
+// delete user favorite with user id
+router.delete("/:userId/favorites/:favoriteId", authenticateToken, async (req, res) => {
+
+    const userId = req.params.userId
+    const favoriteId = req.params.favoriteId
+
+    try {
+        await Favorite.destroy({where: {id: favoriteId, userId}})
+        return res.sendStatus(200)
+    } catch (e) {
+        return res.status(500).json(e)
+    }
+})
+/*  user favorites    */
+
+
 
 module.exports = router

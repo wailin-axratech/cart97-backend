@@ -2,14 +2,20 @@ const jwt = require("jsonwebtoken");
 const {JWT_SECRET} = require("../config/config");
 
 const authenticateToken = (req, res, next) => {
-    const accessToken = req.header("authorization");
+    const authHeader = req.headers['authorization']
+    const accessToken = authHeader && authHeader.split(' ')[1]
     if (!accessToken) {
-        return res.sendStatus(403)
+        return res.status(403).send("you need user token to access this resource")
     }
     try {
-        const validated = jwt.verify(accessToken, JWT_SECRET);
-        req.user = validated;
-        if (validated) {
+        const validatedUser = jwt.verify(accessToken, JWT_SECRET);
+
+        //check if jwt user id and requested id are the same
+        if (validatedUser.id != req.params.userId) {
+            return res.status(403).send("you don't have access to perform this operation")
+        }
+        req.user = validatedUser;
+        if (validatedUser) {
             return next();
         }
     } catch (err) {
@@ -17,4 +23,4 @@ const authenticateToken = (req, res, next) => {
     }
 };
 
-module.exports = { authenticateToken };
+module.exports = {authenticateToken};
