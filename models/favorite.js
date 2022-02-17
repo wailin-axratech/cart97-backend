@@ -13,6 +13,10 @@ const Favorite = sequelize.define('favorite', {
         type: Sequelize.STRING,
         allowNull: false
     },
+    photo:{
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     description: {
         type: Sequelize.STRING,
         allowNull: false
