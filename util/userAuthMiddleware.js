@@ -11,7 +11,7 @@ const authenticateUserToken = (req, res, next) => {
         const validatedUser = jwt.verify(accessToken, JWT_SECRET);
 
         //check if jwt user id and requested id are the same
-        if (validatedUser.id != req.params.userId) {
+        if (req.params.userId && validatedUser.id != req.params.userId) {
             return res.status(403).send("you don't have access to perform this operation")
         }
         req.user = validatedUser;

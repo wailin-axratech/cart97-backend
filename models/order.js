@@ -3,12 +3,6 @@ const sequelize = require("../util/database")
 const User = require("./user");
 
 const Order = sequelize.define('order', {
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true
-    },
     exchangeRate: {
         type: Sequelize.DECIMAL,
         allowNull: false

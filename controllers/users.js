@@ -4,6 +4,7 @@ const Order = require("../models/order");
 const Favorite = require("../models/favorite");
 const {authenticateUserToken} = require("../util/userAuthMiddleware");
 
+
 // get all users
 router.get("/", async (req, res) => {
 
@@ -15,7 +16,6 @@ router.get("/", async (req, res) => {
     } catch (e) {
         return res.status(500).json(e)
     }
-
 })
 
 // get user by id
@@ -30,10 +30,9 @@ router.get("/:id", async (req, res) => {
     }
 })
 
-
 // update user by id
-router.put("/:id", authenticateUserToken, async (req, res) => {
-    const userId = req.params.id
+router.put("/:userId", authenticateUserToken, async (req, res) => {
+    const userId = req.params.userId
 
     const {name, address} = req.body
 
@@ -52,8 +51,8 @@ router.put("/:id", authenticateUserToken, async (req, res) => {
 /*  user orders    */
 
 // get all user orders with user id
-router.get("/:id/orders", authenticateUserToken, async (req, res) => {
-    const userId = req.params.id
+router.get("/:userId/orders", authenticateUserToken, async (req, res) => {
+    const userId = req.params.userId
 
     try {
         const userOrders = await Order.findAll({
@@ -66,7 +65,7 @@ router.get("/:id/orders", authenticateUserToken, async (req, res) => {
 })
 
 // create user orders with user id
-router.post("/:id/orders", authenticateUserToken, async (req, res) => {
+router.post("/:userId/orders", authenticateUserToken, async (req, res) => {
     const userId = req.params.userId
     const {userName, userPhone, userAddress, paymentScreenshot, totalPrice} = req.body;
 
