@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const {JWT_SECRET} = require("../config/config");
 const {authenticateUserToken} = require("../util/userAuthMiddleware");
 const {where} = require("sequelize");
+const OTP = require("../models/otp");
 
 // get user profile
 router.get("/profile", authenticateUserToken, async (req, res) => {
@@ -69,7 +70,7 @@ router.post("/signin", async (req, res) => {
 
 // register user
 router.post("/signup", async (req, res) => {
-    const {name, phone, password, address} = req.body;
+    const {name, phone, code, password, address} = req.body;
 
     try {
 
@@ -78,14 +79,20 @@ router.post("/signup", async (req, res) => {
             return res.status(400).send("phone number already in used")
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10)
-        const createdUser = await User.create({
-            name,
-            phone,
-            password: hashedPassword,
-            address
-        })
-        return res.status(201).json(createdUser)
+        const otpCode = await OTP.findOne({where: {phone, code, verified: false}})
+        if (otpCode) {
+            await OTP.update({verified: true}, {where: {phone, code, verified: false}})
+            const hashedPassword = await bcrypt.hash(password, 10)
+            const createdUser = await User.create({
+                name,
+                phone,
+                password: hashedPassword,
+                address
+            })
+            return res.status(201).json(createdUser)
+        } else {
+            return res.status(400).send("invalid otp code")
+        }
     } catch (e) {
         return res.status(500).json(e)
     }

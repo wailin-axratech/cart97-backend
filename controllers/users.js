@@ -103,7 +103,8 @@ router.get("/:userId/favorites", authenticateUserToken, async (req, res) => {
 // create user favorite with user id
 router.post("/:userId/favorites", authenticateUserToken, async (req, res) => {
     const userId = req.params.userId
-    console.log(userId)
+
+    console.log(req.body)
 
     try {
         const createdFavorite = await Favorite.create({

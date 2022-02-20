@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const {JWT_SECRET} = require("../config/config");
+const User = require("../models/user");
 
-const authenticateUserToken = (req, res, next) => {
+const authenticateUserToken = async (req, res, next) => {
     const authHeader = req.headers['authorization']
     const accessToken = authHeader && authHeader.split(' ')[1]
     if (!accessToken) {
@@ -9,6 +10,11 @@ const authenticateUserToken = (req, res, next) => {
     }
     try {
         const validatedUser = jwt.verify(accessToken, JWT_SECRET);
+
+        const user = await User.findByPk(validatedUser.id)
+        if (user.disabled) {
+            return res.status(403).send("your account is disabled")
+        }
 
         //check if jwt user id and requested id are the same
         if (req.params.userId && validatedUser.id != req.params.userId) {

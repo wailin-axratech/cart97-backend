@@ -8,11 +8,11 @@ const Product = sequelize.define('product', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    photo: {
-        type: Sequelize.STRING,
+    itemId: {
+        type: Sequelize.INTEGER,
         allowNull: false
     },
-    description: {
+    photo: {
         type: Sequelize.STRING,
         allowNull: false
     },
