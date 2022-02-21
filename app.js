@@ -24,7 +24,7 @@ const port = process.env.PORT || 3000;
 // set force true to recreate all tables
 
 sequelize
-    .sync({force: false})
+    .sync({force: t})
     .then(result => {
         console.log(result)
         app.listen(port)

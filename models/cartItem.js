@@ -9,10 +9,10 @@ const CartItem = sequelize.define('product', {
         allowNull: false
     },
     itemId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false
     },
-    photo: {
+    image: {
         type: Sequelize.STRING,
         allowNull: false
     },
@@ -24,20 +24,12 @@ const CartItem = sequelize.define('product', {
         type: Sequelize.DECIMAL,
         allowNull: false
     },
-    weight: {
+    specifications: {
         type: Sequelize.STRING,
-        allowNull: true
-    },
-    color: {
-        type: Sequelize.STRING,
-        allowNull: true
-    },
-    size: {
-        type: Sequelize.STRING,
-        allowNull: true
+        allowNull: false
     },
     link: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
     },
 })
