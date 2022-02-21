@@ -2,6 +2,7 @@ const Sequelize = require("sequelize")
 const sequelize = require("../util/database")
 const User = require("./user");
 const {DataTypes} = require("sequelize");
+const Token = require("./token");
 
 const OTP = sequelize.define('otp', {
     phone: {
@@ -19,5 +20,6 @@ const OTP = sequelize.define('otp', {
     },
 })
 
+OTP.hasOne(Token)
 
 module.exports = OTP

@@ -6,6 +6,7 @@ const {JWT_SECRET} = require("../config/config");
 const {authenticateUserToken} = require("../util/userAuthMiddleware");
 const {where} = require("sequelize");
 const OTP = require("../models/otp");
+const Token = require("../models/token");
 
 // get user profile
 router.get("/profile", authenticateUserToken, async (req, res) => {
@@ -39,11 +40,24 @@ router.post("/update", authenticateUserToken, async (req, res) => {
 })
 
 // reset password
-router.post("/recovery", authenticateUserToken, async (req, res) => {
+router.post("/recovery", async (req, res) => {
+    const {phone, newPassword, token} = req.body
+
+    console.log(phone, newPassword, token)
 
     try {
-        const user = await User.findByPk(req.user.id)
-        return res.json(user)
+        const accessToken = await Token.findByPk(token)
+        if (!accessToken){
+            return res.status(500).send("token doesn't exist")
+        }
+        if (accessToken.used) {
+            return res.status(400).send("token already used")
+        }
+
+        await Token.update({used: true}, {where: {id: accessToken.id}})
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10)
+        await User.update({password: hashedNewPassword}, {where: {phone}})
+        return res.sendStatus(200)
     } catch (e) {
         return res.status(500).json(e)
     }
