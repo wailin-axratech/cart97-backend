@@ -16,10 +16,6 @@ const authenticateUserToken = async (req, res, next) => {
             return res.status(403).send("your account is disabled")
         }
 
-        //check if jwt user id and requested id are the same
-        if (req.params.userId && validatedUser.id != req.params.userId) {
-            return res.status(403).send("you don't have access to perform this operation")
-        }
         req.user = validatedUser;
         if (validatedUser) {
             return next();

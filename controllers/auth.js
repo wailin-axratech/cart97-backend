@@ -9,7 +9,7 @@ const OTP = require("../models/otp");
 const Token = require("../models/token");
 
 // get user profile
-router.get("/profile", authenticateUserToken, async (req, res) => {
+router.get("/account", authenticateUserToken, async (req, res) => {
 
     try {
         const user = await User.findByPk(req.user.id)

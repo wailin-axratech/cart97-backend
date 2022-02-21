@@ -7,7 +7,7 @@ const {authenticateUserToken} = require("../util/userAuthMiddleware");
 const shopeeApiMiddleWare = require("../util/shopeeApiMiddleWare");
 
 
-// get all carts
+// get product info with link
 router.get("", async (req, res) => {
     const productLink = req.query.link
 
