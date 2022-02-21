@@ -21,7 +21,7 @@ app.use("/api/otp", otpController)
 
 const port = process.env.PORT || 3000;
 
-// set force true to recreate all tables if model updated
+// set force true to recreate all tables
 sequelize
     .sync({force: false})
     .then(result => {

@@ -1,4 +1,5 @@
-const fetch = require("node-fetch");
+
+const axios = require("axios");
 
 const shopeeLinkToAPI = async (shopeeLink) => {
     const shopAndProductId = shopeeLink.split("?sp_atk")[0].split("-i.")[1]
@@ -15,14 +16,15 @@ const shopeeLinkToAPI = async (shopeeLink) => {
 const shopeeProductInformationFetcher = async (shopeeApiURL) => {
     //fetch Data From API URL
     console.log(shopeeApiURL)
-    const result = await fetch(shopeeApiURL);
-    const shopeeData = await result.json();
+    const result = await axios.get(shopeeApiURL);
+    const shopeeData = await result.data
     if (shopeeData.error !== null) {
         throw new Error("shopee error")
     }
 
     const productInformation = {};
 
+    productInformation.itemId = shopeeData.data.itemid;
     productInformation.name = shopeeData.data.name;
     productInformation.minPrice = shopeeData.data.price_min
     productInformation.maxPrice = shopeeData.data.price_max

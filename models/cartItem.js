@@ -3,7 +3,7 @@ const sequelize = require("../util/database")
 const User = require("./user");
 const Cart = require("./cart");
 
-const Product = sequelize.define('product', {
+const CartItem = sequelize.define('product', {
     name: {
         type: Sequelize.STRING,
         allowNull: false
@@ -14,6 +14,10 @@ const Product = sequelize.define('product', {
     },
     photo: {
         type: Sequelize.STRING,
+        allowNull: false
+    },
+    quantity: {
+        type: Sequelize.INTEGER,
         allowNull: false
     },
     price: {
@@ -38,7 +42,7 @@ const Product = sequelize.define('product', {
     },
 })
 
-Product.belongsTo(User)
+CartItem.belongsTo(User)
 
 
-module.exports = Product
+module.exports = CartItem

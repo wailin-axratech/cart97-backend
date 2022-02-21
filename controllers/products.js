@@ -2,7 +2,7 @@ const router = require("express").Router()
 const User = require("../models/user")
 const Order = require("../models/order");
 const Cart = require("../models/cart");
-const Product = require("../models/product");
+const Product = require("../models/cartItem");
 const {authenticateUserToken} = require("../util/userAuthMiddleware");
 const shopeeApiMiddleWare = require("../util/shopeeApiMiddleWare");
 

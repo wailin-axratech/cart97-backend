@@ -15,22 +15,6 @@ const Favorite = sequelize.define('favorite', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    price: {
-        type: Sequelize.DECIMAL,
-        allowNull: false
-    },
-    weight: {
-        type: Sequelize.STRING,
-        allowNull: true
-    },
-    color: {
-        type: Sequelize.STRING,
-        allowNull: true
-    },
-    size: {
-        type: Sequelize.STRING,
-        allowNull: true
-    },
     link: {
         type: Sequelize.STRING,
         allowNull: false

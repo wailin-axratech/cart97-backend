@@ -20,7 +20,7 @@ const Order = sequelize.define('order', {
         allowNull: false
     },
     receivedQuantity: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
     }
 })
 
