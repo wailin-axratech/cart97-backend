@@ -7,11 +7,12 @@ const Order = require("../../models/order");
 
 // get all users
 router.get("/", authenticateAdminToken, async (req, res) => {
+    const {sort, filter} = req.query
+
+    console.log(sort, filter)
 
     try {
-        const users = await User.findAll({
-            order: [['createdAt', 'DESC']]
-        })
+        const users = await User.findAll()
         return res.json(users)
     } catch (e) {
         return res.status(500).json(e)

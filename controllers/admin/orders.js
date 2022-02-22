@@ -7,10 +7,7 @@ const router = require("express").Router()
 router.get("", authenticateAdminToken, async (req, res) => {
 
     try {
-        const orders = await Order.findAll({
-            order: [['createdAt', 'DESC']],
-            include: User
-        })
+        const orders = await Order.findAll()
         return res.json(orders)
     } catch (e) {
         return res.status(500).json(e)
